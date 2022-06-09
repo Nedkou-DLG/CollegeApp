@@ -9,11 +9,15 @@ namespace College.Domain.Entities
     [Table("Courses")]
 	public class Course : IEntity
 	{
+        public Course()
+        {
+            CreatedDate = DateTime.Now;
+        }
         public int Id { get; set; }
 
         public string Name { get; set; }
-        [Required]
-        public Teacher Teacher { get; set; }
+
+        public virtual Teacher Teacher { get; set; }
 
         public virtual ICollection<StudentCourse> Students { get; set; }
 
