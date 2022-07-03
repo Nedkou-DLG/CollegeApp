@@ -28,6 +28,7 @@
     <None Remove="Application\Services\" />
     <None Remove="Application\Interfaces\" />
     <None Remove="Configurations\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\College.Infrastructure\College.Infrastructure.csproj">
@@ -39,5 +40,6 @@
     <Folder Include="Application\Services\" />
     <Folder Include="Application\Interfaces\" />
     <Folder Include="Configurations\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

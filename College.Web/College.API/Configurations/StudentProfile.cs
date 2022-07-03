@@ -2,6 +2,7 @@
 using AutoMapper;
 using College.Domain.Entities;
 using College.Domain.Models;
+using College.Domain.Models.Student;
 
 namespace College.API.Configurations
 {
@@ -14,6 +15,7 @@ namespace College.API.Configurations
 
 			//Model To Entitiy
 			CreateMap<StudentModel, Student>();
+			CreateMap<CreateStudentModel, Student>();
 		}
 	}
 }

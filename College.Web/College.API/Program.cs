@@ -1,6 +1,7 @@
 ﻿using College.API.Application.Interfaces;
 using College.API.Application.Services;
 using College.API.Configurations;
+using College.API.Helpers;
 using College.Domain.Interfaces.Repositories;
 using College.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -11,37 +12,43 @@ public class Program
 {
     public static void Main(string[] args)
     {
-    var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
+        builder.Services.AddCors();
+        builder.Services.AddControllers();
 
-    builder.Services.AddControllers();
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddScoped<IStudentService, StudentService>();
-       builder.Services.AddAutoMapper(
-           typeof(StudentProfile));
+        builder.Services.RegisterServices();
+        builder.Services.RegisterModelMappers();
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.AddDbContext<CollegeContext>(options =>
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddDbContext<CollegeContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CollegeDBContext")));
 
         var app = builder.Build();
 
     // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
-    app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
 
-    app.UseAuthorization();
+        app.UseCors(x => x
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 
-    app.MapControllers();
+        
+        app.UseMiddleware<JwtMiddleware>();
 
-    app.Run();
+        app.MapControllers();
+
+        app.Run();
     }
 }
 

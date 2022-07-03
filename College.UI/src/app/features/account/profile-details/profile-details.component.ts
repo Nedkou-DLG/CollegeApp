@@ -15,7 +15,7 @@ export class ProfileDetailsComponent implements OnInit {
   constructor(private authService: AuthenticationService) { }
 
   ngOnInit() {
-    this.fullName = this.authService.getCurrentUser().fullName;
+    this.fullName = this.authService.getCurrentUser().name;
     this.email = this.authService.getCurrentUser().email;
   }
 

@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
  import { AuthenticationService } from 'src/app/core/services/auth.service';
 import { SpinnerService } from '../../core/services/spinner.service';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
+import { UserType } from '../models/user-types-enum';
 
 @Component({
     selector: 'app-layout',
@@ -18,7 +19,9 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     mobileQuery: MediaQueryList;
     showSpinner: boolean = false;
     userName: string = "";
-    isAdmin: boolean = false;
+
+    userType!: UserType;
+    userTypeEnum = UserType;
 
     private autoLogoutSubscription: Subscription = new Subscription;
 
@@ -37,8 +40,8 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit(): void {
         const user = this.authService.getCurrentUser();
 
-        this.isAdmin = user.isAdmin;
-        this.userName = user.fullName;
+        this.userName = user.name;
+        this.userType = user.type;
 
         // Auto log-out subscription
         const timer$ = timer(2000, 5000);

@@ -6,8 +6,8 @@ using College.Domain.Interfaces;
 namespace College.Domain.Entities
 {
     [Table("Students")]
-	public class Student : IEntity
-	{
+    public class Student : IEntity
+    {
 
         public Student()
         {
@@ -20,6 +20,12 @@ namespace College.Domain.Entities
         public string? EGN { get; set; }
 
         public string? Line { get; set; }
+
+        public string? Email { get; set; }
+
+        public int UserId { get; set; }
+
+        public virtual UserRecord User {get;set;}
 
         public virtual ICollection<StudentCourse> Courses { get; set; }
 

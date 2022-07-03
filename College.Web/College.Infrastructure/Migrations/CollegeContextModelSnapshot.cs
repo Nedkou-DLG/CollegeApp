@@ -86,13 +86,22 @@ namespace College.Infrastructure.Migrations
                     b.Property<string>("EGN")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Line")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Students");
                 });
@@ -137,11 +146,17 @@ namespace College.Infrastructure.Migrations
                     b.Property<string>("EGN")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("EmployeedByDepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -151,7 +166,37 @@ namespace College.Infrastructure.Migrations
 
                     b.HasIndex("EmployeedByDepartmentId");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("College.Domain.Entities.UserRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("College.Domain.Entities.Course", b =>
@@ -163,6 +208,15 @@ namespace College.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("College.Domain.Entities.Student", b =>
+                {
+                    b.HasOne("College.Domain.Entities.UserRecord", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("College.Domain.Entities.Student", "UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("College.Domain.Entities.StudentCourse", b =>
@@ -196,9 +250,15 @@ namespace College.Infrastructure.Migrations
                         .HasForeignKey("EmployeedByDepartmentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("College.Domain.Entities.UserRecord", "User")
+                        .WithOne("Teacher")
+                        .HasForeignKey("College.Domain.Entities.Teacher", "UserId");
+
                     b.Navigation("DepartmentManager");
 
                     b.Navigation("EmployeedByDepartment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("College.Domain.Entities.Course", b =>
@@ -222,6 +282,13 @@ namespace College.Infrastructure.Migrations
             modelBuilder.Entity("College.Domain.Entities.Teacher", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("College.Domain.Entities.UserRecord", b =>
+                {
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 #pragma warning restore 612, 618
         }

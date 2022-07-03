@@ -9,6 +9,26 @@ const appRoutes: Routes = [
     loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
   },
   {
+    path: 'departments',
+    loadChildren: () => import('./features/department/department.module').then(m => m.DepartmentModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'teachers',
+    loadChildren: () => import('./features/teachers/teachers.module').then(m => m.TeachersModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'students',
+    loadChildren: () => import('./features/students/students.module').then(m => m.StudentsModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'courses',
+    loadChildren: () => import('./features/courses/courses.module').then(m => m.CoursesModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [AuthGuard]
@@ -26,16 +46,6 @@ const appRoutes: Routes = [
   {
     path: 'account',
     loadChildren: () => import('./features/account/account.module').then(m => m.AccountModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'icons',
-    loadChildren: () => import('./features/icons/icons.module').then(m => m.IconsModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'typography',
-    loadChildren: () => import('./features/typography/typography.module').then(m => m.TypographyModule),
     canActivate: [AuthGuard]
   },
   {

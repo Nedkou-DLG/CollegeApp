@@ -10,6 +10,7 @@ namespace College.Infrastructure
 		public DbSet<Teacher> Teachers { get; set; }
 		public DbSet<Department> Departments { get; set; }
 		public DbSet<StudentCourse> StudentsCourses { get; set; }
+        public DbSet<UserRecord> Users { get; set; }
 
         public CollegeContext(DbContextOptions<CollegeContext> options) : base(options)
 		{
@@ -29,6 +30,10 @@ namespace College.Infrastructure
                 .WithMany(x => x.Teachers).IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Teacher>()
+                .HasOne(x => x.User)
+                .WithOne(x => x.Teacher).IsRequired(false);
+
             modelBuilder.Entity<StudentCourse>()
                 .HasKey(bc => new { bc.StudentId, bc.CourseId });
 
@@ -41,6 +46,10 @@ namespace College.Infrastructure
                 .HasOne(bc => bc.Course)
                 .WithMany(c => c.Students)
                 .HasForeignKey(bc => bc.StudentId);
+
+            modelBuilder.Entity<Student>()
+                .HasOne(x => x.User)
+                .WithOne(x => x.Student).IsRequired(false);
         }
 	}
 }

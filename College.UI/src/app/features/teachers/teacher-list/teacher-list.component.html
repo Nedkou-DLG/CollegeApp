@@ -1,0 +1,61 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+    <div fxFlex="95%">
+
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    <h3>Teachers</h3>
+
+                </mat-card-title>
+                <div fxFlex></div>
+                <button (click)="addNewTeacher()" mat-button color="primary">
+                    <mat-icon>add</mat-icon>
+                    Add Teacher
+                </button>
+            </mat-card-header>
+            <mat-card-content>
+
+                <table mat-table [dataSource]="dataSource" matSort>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="egn">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> EGN </th>
+                        <td mat-cell *matCellDef="let element"> {{element.egn}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="addToDepartment(element)">
+                                  Add to department
+                                </button>
+                                
+                              </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</div>

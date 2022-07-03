@@ -4,6 +4,8 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { AuthenticationService } from 'src/app/core/services/auth.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { first } from 'rxjs';
+import { LoginUser } from 'src/app/shared/models/auth';
 
 @Component({
     selector: 'app-login',
@@ -22,7 +24,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('angular-material-template - Login');
+        this.titleService.setTitle('College - Login');
         this.authenticationService.logout();
         this.createForm();
     }
@@ -31,34 +33,35 @@ export class LoginComponent implements OnInit {
         const savedUserEmail = localStorage.getItem('savedUserEmail');
 
         this.loginForm = new FormGroup({
-            email: new FormControl(savedUserEmail, [Validators.required, Validators.email]),
+            username: new FormControl(savedUserEmail, [Validators.required]),
             password: new FormControl('', Validators.required),
             rememberMe: new FormControl(savedUserEmail !== null)
         });
     }
 
     login() {
-        const email = this.loginForm.get('email')?.value;
-        const password = this.loginForm.get('password')?.value;
         const rememberMe = this.loginForm.get('rememberMe')?.value;
-
+        let loginUser =  <LoginUser>{
+            username: this.loginForm.get('username')?.value,
+            password: this.loginForm.get('password')?.value
+        };
         this.loading = true;
         this.authenticationService
-            .login(email.toLowerCase(), password)
-            .subscribe(
-                data => {
+            .login(loginUser).pipe(first())
+            .subscribe({
+                next: () => {
                     if (rememberMe) {
-                        localStorage.setItem('savedUserEmail', email);
+                        localStorage.setItem('savedUsername', loginUser.username);
                     } else {
-                        localStorage.removeItem('savedUserEmail');
+                        localStorage.removeItem('savedUsername');
                     }
                     this.router.navigate(['/']);
                 },
-                error => {
+                error: error => {
                     this.notificationService.openSnackBar(error.error);
                     this.loading = false;
                 }
-            );
+            });
     }
 
     resetPassword() {

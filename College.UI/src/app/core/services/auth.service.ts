@@ -1,11 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, map } from 'rxjs/operators';
-import * as jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
 
 import { environment } from '../../../environments/environment';
 import { of, EMPTY } from 'rxjs';
+import { AuthUser, LoginUser } from 'src/app/shared/models/auth';
 
 @Injectable({
     providedIn: 'root'
@@ -16,26 +17,18 @@ export class AuthenticationService {
         @Inject('LOCALSTORAGE') private localStorage: Storage) {
     }
 
-    login(email: string, password: string) {
-        return of(true)
-            .pipe(delay(1000),
-                map((/*response*/) => {
-                    // set token property
-                    // const decodedToken = jwt_decode(response['token']);
+    login(loginUser: LoginUser) {
+        return this.http.post<AuthUser>(`${environment.apiUrl}/auth/authenticate`, loginUser)
+            .pipe(map(user => {
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                
+                const decoded = jwt_decode(user.token);
+                user.expiration = new Date((decoded as {exp:number}).exp * 1000);
+                user.alias = user.email.split('@')[0]
+                localStorage.setItem('currentUser', JSON.stringify(user));
 
-                    // store email and jwt token in local storage to keep user logged in between page refreshes
-                    this.localStorage.setItem('currentUser', JSON.stringify({
-                        token: 'aisdnaksjdn,axmnczm',
-                        isAdmin: true,
-                        email: 'john.doe@gmail.com',
-                        id: '12312323232',
-                        alias: 'john.doe@gmail.com'.split('@')[0],
-                        expiration: moment().add(1, 'days').toDate(),
-                        fullName: 'John Doe'
-                    }));
-
-                    return true;
-                }));
+                return true;
+            }));
     }
 
     logout(): void {
@@ -43,18 +36,10 @@ export class AuthenticationService {
         this.localStorage.removeItem('currentUser');
     }
 
-    getCurrentUser(): any {
+    getCurrentUser(): AuthUser {
         // TODO: Enable after implementation
-        // return JSON.parse(this.localStorage.getItem('currentUser'));
-        return {
-            token: 'aisdnaksjdn,axmnczm',
-            isAdmin: true,
-            email: 'john.doe@gmail.com',
-            id: '12312323232',
-            alias: 'john.doe@gmail.com'.split('@')[0],
-            expiration: moment().add(1, 'days').toDate(),
-            fullName: 'John Doe'
-        };
+         return JSON.parse(this.localStorage.getItem('currentUser') || '{}');
+        
     }
 
     passwordResetRequest(email: string) {

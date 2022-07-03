@@ -20,6 +20,8 @@ namespace College.Domain.Entities
 
         public string? EGN { get; set; }
 
+        public string? Email { get; set; }
+
         public int? EmployeedByDepartmentId { get; set; }
 
         public virtual Department EmployeedByDepartment { get; set; }
@@ -29,6 +31,10 @@ namespace College.Domain.Entities
         public virtual Department DepartmentManager { get; set; }
 
         public virtual ICollection<Course> Courses { get; set; }
+
+        public int UserId { get; set; }
+
+        public virtual UserRecord User { get; set; }
 
         public DateTime CreatedDate { get; set; }
     }
