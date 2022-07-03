@@ -6,21 +6,19 @@ import { Title } from '@angular/platform-browser';
 import { AdminService } from 'src/app/core/services/api/admin.service';
 import { AuthenticationService } from 'src/app/core/services/auth.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { UserType } from 'src/app/shared/models/user-types-enum';
-import { AddCourseDialogComponent } from '../add-course-dialog/add-course-dialog.component';
+import { ApplyCourseDialogComponent } from '../apply-course-dialog/apply-course-dialog.component';
 
 @Component({
-  selector: 'app-course-list',
-  templateUrl: './course-list.component.html',
-  styleUrls: ['./course-list.component.css']
+  selector: 'app-student-courses-list',
+  templateUrl: './student-courses-list.component.html',
+  styleUrls: ['./student-courses-list.component.css']
 })
-export class CourseListComponent implements OnInit {
-
-  displayedColumns: string[] = ['name', 'teacher', 'actions'];
+export class StudentCoursesListComponent implements OnInit {
+  displayedColumns: string[] = ['name', 'teacher', 'evaluation', 'absences', 'actions'];
   // dataSource = new MatTableDataSource(ELEMENT_DATA);
   dataSource!: any;
   @ViewChild(MatSort, { static: true })
-  dialogRefNewCourse!: MatDialogRef<AddCourseDialogComponent>
+  dialogRefApplyCourse!: MatDialogRef<ApplyCourseDialogComponent>
   // dialogRefAssignLeader!: MatDialogRef<AddLeaderDepartmentDialogComponent>
   sort: MatSort = new MatSort;
 
@@ -28,20 +26,17 @@ export class CourseListComponent implements OnInit {
     private notificationService: NotificationService,
     private titleService: Title,
     private dialog: MatDialog,
-    private authService: AuthenticationService) { }
+    private authService: AuthenticationService
+    ) { }
 
   ngOnInit(): void {
     this.titleService.setTitle('College - Courses');
-    var user = this.authService.getCurrentUser();
-    if(user.type === UserType.Admin){
-      this.getAllCourses();
-    }else if(user.type === UserType.Teacher){
-      this.getTeacherCourses(user.id);
-    }
+    let user = this.authService.getCurrentUser();
+    this.getStudentCourses(user.id);
   }
 
-  getTeacherCourses(id: number) {
-    this.adminService.getTeacherCourses(id).subscribe({
+  getStudentCourses(id:number) {
+    this.adminService.getStudentCourses(id).subscribe({
       next: result => {
         this.dataSource = new MatTableDataSource(result);
         this.notificationService.openSnackBar('Courses loaded successfully');
@@ -64,26 +59,17 @@ export class CourseListComponent implements OnInit {
     })
   }
 
-  addNewCourse(){
-    this.dialogRefNewCourse = this.dialog.open(AddCourseDialogComponent,{
+  applyCourse(){
+    this.dialogRefApplyCourse = this.dialog.open(ApplyCourseDialogComponent,{
       minHeight: '300px',
       minWidth: '400px',
+      data:{
+        studentId: this.authService.getCurrentUser().id
+      }
     });
-    this.dialogRefNewCourse.afterClosed().subscribe(result => {
+    this.dialogRefApplyCourse.afterClosed().subscribe(result => {
       window.location.reload();
     });
   }
 
-  // addLeader(element:any){
-  //   this.dialogRefAssignLeader = this.dialog.open(AddLeaderDepartmentDialogComponent,{
-  //     minHeight: '200px',
-  //     minWidth: '400px',
-  //     data:{
-  //       departmentId: element.id
-  //     }
-  //   });
-  //   this.dialogRefAssignLeader.afterClosed().subscribe(result => {
-  //     window.location.reload();
-  //   });
-  // }
 }

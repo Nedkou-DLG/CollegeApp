@@ -8,6 +8,7 @@ namespace College.Domain.Interfaces.Repositories
 		ICourseRepository CourseRepository { get; }
 		IStudentRepository StudentRepository { get; }
 		IUserRepository UserRepository { get; }
+		IStudentCourseRepository StudentCourseRepository { get; }
 		void Save();
 		Task SaveAsync();
 	}

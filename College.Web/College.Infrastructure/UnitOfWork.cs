@@ -12,6 +12,7 @@ namespace College.Infrastructure
         private ICourseRepository courseRepository;
         private IStudentRepository studentRepository;
         private IUserRepository userRepository;
+        private IStudentCourseRepository studentCourseRepository;
 
 		public UnitOfWork(CollegeContext context)
 		{
@@ -75,6 +76,18 @@ namespace College.Infrastructure
                     this.userRepository = new UserRepository(context);
                 }
                 return this.userRepository;
+            }
+        }
+
+        public IStudentCourseRepository StudentCourseRepository
+        {
+            get
+            {
+                if (this.studentCourseRepository == null)
+                {
+                    this.studentCourseRepository = new StudentCourseRepository(context);
+                }
+                return this.studentCourseRepository;
             }
         }
 

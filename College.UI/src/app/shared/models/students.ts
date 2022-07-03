@@ -1,3 +1,5 @@
+import { CourseModel } from "./courses"
+
 export interface StudentModel {
     id: number,
     name: string,
@@ -13,4 +15,11 @@ export interface CreateStudentModel {
     email: string,
     username: string,
     password: string
+}
+
+export interface StudentCourseModel {
+    id: number,
+    course: CourseModel,
+    evaluation: number,
+    absences: number
 }

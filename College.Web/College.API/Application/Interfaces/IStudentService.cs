@@ -9,6 +9,8 @@ namespace College.API.Application.Interfaces
 	{
 		Task CreateStudent(CreateStudentModel student);
 		Task<IEnumerable<StudentModel>> GetAll();
+		Task<IEnumerable<StudentCourseModel>> GetStudentCourses(int id);
+		Task ApplyCourse(int courseId, int studentId);
 	}
 }
 

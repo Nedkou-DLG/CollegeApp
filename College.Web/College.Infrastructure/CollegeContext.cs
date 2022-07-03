@@ -35,9 +35,6 @@ namespace College.Infrastructure
                 .WithOne(x => x.Teacher).IsRequired(false);
 
             modelBuilder.Entity<StudentCourse>()
-                .HasKey(bc => new { bc.StudentId, bc.CourseId });
-
-            modelBuilder.Entity<StudentCourse>()
                 .HasOne(bc => bc.Student)
                 .WithMany(b => b.Courses)
                 .HasForeignKey(bc => bc.CourseId);

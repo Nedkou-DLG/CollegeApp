@@ -12,6 +12,7 @@ namespace College.API.Configurations
 		{
 			// Entity To Model
 			CreateMap<Student, StudentModel>();
+			CreateMap<StudentCourse, StudentCourseModel>();
 
 			//Model To Entitiy
 			CreateMap<StudentModel, Student>();

@@ -90,26 +90,45 @@
             </mat-icon>
             <p mat-line> Courses </p>
           </a>
-          <!-- <a mat-list-item [routerLink]="['/customers']" routerLinkActive="active">
-            <mat-icon mat-list-icon>
-              business
-            </mat-icon>
-            <p mat-line> Customers </p>
-          </a>
-          <a mat-list-item [routerLink]="['/users']" routerLinkActive="active">
-            <mat-icon mat-list-icon>
-              people
-            </mat-icon>
-            <p mat-line> Users </p>
-          </a>
 
-          <a mat-list-item [routerLink]="['/account/profile']">
+          <!-- <a mat-list-item [routerLink]="['/account/profile']">
             <mat-icon mat-list-icon>person</mat-icon>
             <p mat-line> Account </p>
           </a> -->
+        </ng-container>
+        <ng-container *ngIf="userType === userTypeEnum.Teacher">
+          <a mat-list-item [routerLink]="['/students']" routerLinkActive="active">
+            <mat-icon mat-list-icon>
+              people
+            </mat-icon>
+            <p mat-line> Students </p>
+          </a>
+          <a mat-list-item [routerLink]="['/courses']" routerLinkActive="active">
+            <mat-icon mat-list-icon>
+              business
+            </mat-icon>
+            <p mat-line> Courses </p>
+          </a>
 
-
-
+          <!-- <a mat-list-item [routerLink]="['/account/profile']">
+            <mat-icon mat-list-icon>person</mat-icon>
+            <p mat-line> Account </p>
+          </a> -->
+        </ng-container>
+        <ng-container *ngIf="userType === userTypeEnum.Student">
+          <!-- <a mat-list-item [routerLink]="['/students']" routerLinkActive="active">
+            <mat-icon mat-list-icon>
+              people
+            </mat-icon>
+            <p mat-line> Students </p>
+          </a> -->
+          <a mat-list-item [routerLink]="['/courses/my-courses']" routerLinkActive="active">
+            <mat-icon mat-list-icon>
+              business
+            </mat-icon>
+            <p mat-line> Courses </p>
+          </a>
+          
         </ng-container>
         <mat-divider></mat-divider>
         <a mat-list-item [routerLink]="['/auth/login']">

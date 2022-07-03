@@ -55,6 +55,8 @@ namespace College.API.Application.Services
 
             department.Manager = teacher;
 
+
+
             await _unitOfWork.SaveAsync();
         }
     }

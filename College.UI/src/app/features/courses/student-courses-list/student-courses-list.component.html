@@ -1,0 +1,65 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+    <div fxFlex="95%">
+
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    <h3>My Courses</h3>
+
+                </mat-card-title>
+                <div fxFlex></div>
+                <button (click)="applyCourse()" mat-button color="primary">
+                    <mat-icon>add</mat-icon>
+                    Apply Course
+                </button>
+            </mat-card-header>
+            <mat-card-content>
+
+                <table mat-table [dataSource]="dataSource" matSort>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.course.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="teacher">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Teacher </th>
+                        <td mat-cell *matCellDef="let element"> {{element.course?.teacher?.name ?
+                            element.course?.teacher?.name : '-'}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="evaluation">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Evaluation </th>
+                        <td mat-cell *matCellDef="let element"> {{element.evaluation}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="absences">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Absences </th>
+                        <td mat-cell *matCellDef="let element"> {{element.absences}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="addLeader(element)">
+                                  Add leader
+                                </button>
+
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</div>

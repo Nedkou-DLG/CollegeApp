@@ -36,6 +36,14 @@ namespace College.API.Application.Services
 
             await _unitOfWork.SaveAsync();
         }
+
+        public async Task<IEnumerable<CourseModel>> GetTeacherCourses(int id)
+        {
+            var courses = _unitOfWork.CourseRepository.AsQueryable().Include(x => x.Teacher).Where(x => x.TeacherId == id);
+
+            return courses.ProjectTo<CourseModel>(_mapper.ConfigurationProvider);
+
+        }
     }
 }
 

@@ -36,15 +36,32 @@ namespace College.API.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(UserType.Admin)]
+        [Authorize(UserType.Admin, UserType.Student)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllStudents()
+        public async Task<IActionResult> GetAllCourses()
         {
             try
             {
                 var response = await _courseService.GetAll();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpGet("teacher/all/{id}")]
+        [Authorize(UserType.Admin, UserType.Teacher)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetTeacherCourses(int id)
+        {
+            try
+            {
+                var response = await _courseService.GetTeacherCourses(id);
                 return Ok(response);
             }
             catch (Exception ex)

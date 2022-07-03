@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CourseModel, CreateCourseModel } from 'src/app/shared/models/courses';
 import { CreateDepartmentModel, DepartmentModel } from 'src/app/shared/models/departments';
-import { CreateStudentModel, StudentModel } from 'src/app/shared/models/students';
+import { CreateStudentModel, StudentCourseModel, StudentModel } from 'src/app/shared/models/students';
 import { CreateTeacherModel, TeacherModel } from 'src/app/shared/models/teachers';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService } from '../auth.service';
@@ -57,5 +57,17 @@ export class AdminService {
 
     addNewCourse(model: CreateCourseModel){
       return this.http.post(`${environment.apiUrl}/course/add`, model);
+    }
+
+    getTeacherCourses(id:number){
+      return this.http.get<CourseModel[]>(`${environment.apiUrl}/course/teacher/all/${id}`)
+    }
+
+    getStudentCourses(id:number){
+      return this.http.get<StudentCourseModel[]>(`${environment.apiUrl}/student/courses/${id}`)
+    }
+
+    applyStudentCourse(model: any){
+      return this.http.post(`${environment.apiUrl}/student/apply-course`, model);
     }
 }
